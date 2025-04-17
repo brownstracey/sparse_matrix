@@ -1,50 +1,62 @@
 import numpy as np
-
-# Load matrices from the CSV files
-matrix_1 = np.loadtxt('matrix1.csv', delimiter=',')
-matrix_2 = np.loadtxt('matrix2.csv', delimiter=',')
-
-print("Matrix 1:")
-print(matrix_1)
-
-print("Matrix 2:")
-print(matrix_2)
-
-matrix_add = matrix_1 + matrix_2
-print("Matrix Addition:")
-print(matrix_add)
-
-matrix_sub = matrix_1 - matrix_2
-print("Matrix Subtraction:")
-print(matrix_sub)
-
-matrix_mul = matrix_1 @ matrix_2  # Or you can use np.dot(matrix_1, matrix_2)
-print("Matrix Multiplication:")
-print(matrix_mul)
-
 from scipy.sparse import coo_matrix
 
-def load_sparse_matrix(file_path, num_rows, num_cols):
-    """
-    Load a sparse matrix from a CSV file (row, col, value).
-    """
-    # Load data from the file (like reading a list of numbers)
-    data = np.loadtxt(file_path, delimiter=',', skiprows=1)  # Read the file
-    
-    # Extract the rows, columns, and values from the data
-    row_indices = data[:, 0].astype(int)  # The rows where the numbers are
-    col_indices = data[:, 1].astype(int)  # The columns where the numbers are
-    values = data[:, 2]  # The actual numbers that are in the grid
-    
-    # Create a sparse matrix (like making a grid with only the numbers we care about)
-    sparse_matrix = coo_matrix((values, (row_indices, col_indices)), shape=(num_rows, num_cols))
-    
-    return sparse_matrix
+# --- 1: Dense Matrices ---
 
-# Example: Load two matrices from files
-matrix_1 = load_sparse_matrix("matrix1.csv", 5, 5)  # Load the first matrix (5x5 grid)
-matrix_2 = load_sparse_matrix("matrix2.csv", 5, 5)  # Load the second matrix (5x5 grid)
+# Load two matrices from CSV files. These should just be standard comma-separated grids of numbers.
+matrix1 = np.loadtxt('matrix1.csv', delimiter=',')
+matrix2 = np.loadtxt('matrix2.csv', delimiter=',')
 
-# Print the matrices (to see what they look like)
-print(matrix_1)
-print(matrix_2)
+print("Here's Matrix 1:")
+print(matrix1)
+
+print("\nAnd here's Matrix 2:")
+print(matrix2)
+
+# math operations
+added = matrix1 + matrix2
+print("\nMatrix 1 + Matrix 2:")
+print(added)
+
+subtracted = matrix1 - matrix2
+print("\nMatrix 1 - Matrix 2:")
+print(subtracted)
+
+multiplied = matrix1 @ matrix2  
+print("\nMatrix 1 multiplied by Matrix 2:")
+print(multiplied)
+
+
+# --- Part 2: Sparse Matrices ---
+
+def load_sparse_matrix(file_path, rows, cols):
+    """
+    Loads a sparse matrix from a CSV file where each row looks like:
+    row_index, column_index, value
+
+    This approach is handy for large matrices where most values are zero.
+    """
+    try:
+        raw_data = np.loadtxt(file_path, delimiter=',', skiprows=1)
+    except Exception as e:
+        print(f"Could not load file {file_path}: {e}")
+        return None
+
+    row_idx = raw_data[:, 0].astype(int)
+    col_idx = raw_data[:, 1].astype(int)
+    values = raw_data[:, 2]
+
+    # Build the sparse matrix in COO format
+    return coo_matrix((values, (row_idx, col_idx)), shape=(rows, cols))
+
+
+# Load example sparse matrices 
+sparse1 = load_sparse_matrix('matrix1.csv', 5, 5)
+sparse2 = load_sparse_matrix('matrix2.csv', 5, 5)
+
+print("\nSparse Matrix 1:")
+print(sparse1)
+
+print("\nSparse Matrix 2:")
+print(sparse2)
+
