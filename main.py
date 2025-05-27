@@ -17,7 +17,7 @@ def show_csr(csr):
     print("Row Pointer:", row_ptr)
 
 def main():
-    print("Welcome to the Matrix Calculator!\n")
+    print("Welcome to my Matrix Calculator!\n")
 
     mat1 = read_matrix("matrix1.txt")
     mat2 = read_matrix("matrix2.txt")
@@ -27,17 +27,17 @@ def main():
         choice = input("Enter your choice: ").strip()
 
         if choice == '1':
-            print("\nResult of A + B:")
+            print("\nYour results:")
             result = mat1.add(mat2)
             result.print_matrix()
 
         elif choice == '2':
-            print("\nResult of A - B:")
+            print("\nYour results:")
             result = mat1.subtract(mat2)
             result.print_matrix()
 
         elif choice == '3':
-            print("\nResult of A x B:")
+            print("\nYour results:")
             result = mat1.multiply(mat2)
             if result:
                 result.print_matrix()
@@ -77,7 +77,7 @@ def main():
             break
 
         else:
-            print("That’s not a valid option. Try again.")
+            print("That’s not a valid option. Pick one of the options above to get results!.")
 
 if __name__ == "__main__":
     main()
